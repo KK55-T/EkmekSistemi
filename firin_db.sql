@@ -20,38 +20,40 @@ SET time_zone = "+00:00";
 --
 -- Veritabanı: `firin_db`
 --
+CREATE DATABASE IF NOT EXISTS firin_db;
+USE firin_db;
 
 DELIMITER $$
 --
 -- Yordamlar
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `BayiEkle` (IN `p_ad` VARCHAR(100), IN `p_yetkili` VARCHAR(100), IN `p_tel` VARCHAR(15), IN `p_adres` VARCHAR(250))   BEGIN
+CREATE PROCEDURE `BayiEkle` (IN `p_ad` VARCHAR(100), IN `p_yetkili` VARCHAR(100), IN `p_tel` VARCHAR(15), IN `p_adres` VARCHAR(250))   BEGIN
     INSERT INTO bayiler (bayi_ad, yetkili, tel, adres) VALUES (p_ad, p_yetkili, p_tel, p_adres);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `BayiGuncelle` (IN `p_id` INT, IN `p_ad` VARCHAR(100), IN `p_yetkili` VARCHAR(100), IN `p_tel` VARCHAR(15), IN `p_adres` VARCHAR(250))   BEGIN
+CREATE PROCEDURE `BayiGuncelle` (IN `p_id` INT, IN `p_ad` VARCHAR(100), IN `p_yetkili` VARCHAR(100), IN `p_tel` VARCHAR(15), IN `p_adres` VARCHAR(250))   BEGIN
     UPDATE bayiler SET bayi_ad=p_ad, yetkili=p_yetkili, tel=p_tel, adres=p_adres WHERE bayi_id=p_id;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `BayiListele` ()   BEGIN
+CREATE PROCEDURE `BayiListele` ()   BEGIN
     SELECT * FROM bayiler;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `BayiSil` (IN `p_id` INT)   BEGIN
+CREATE PROCEDURE `BayiSil` (IN `p_id` INT)   BEGIN
     DELETE FROM bayiler WHERE bayi_id=p_id;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `TeslimatYap` (IN `p_bayi_id` INT, IN `p_urun_id` INT, IN `p_adet` INT)   BEGIN
+CREATE PROCEDURE `TeslimatYap` (IN `p_bayi_id` INT, IN `p_urun_id` INT, IN `p_adet` INT)   BEGIN
     DECLARE p_fiyat FLOAT;
     SELECT fiyat INTO p_fiyat FROM urunler WHERE urun_id = p_urun_id;
     INSERT INTO teslimatlar (bayi_id, urun_id, adet, toplam_fiyat) VALUES (p_bayi_id, p_urun_id, p_adet, p_fiyat * p_adet);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `UrunEkle` (IN `p_ad` VARCHAR(50), IN `p_fiyat` FLOAT, IN `p_stok` INT)   BEGIN
+CREATE PROCEDURE `UrunEkle` (IN `p_ad` VARCHAR(50), IN `p_fiyat` FLOAT, IN `p_stok` INT)   BEGIN
     INSERT INTO urunler (urun_ad, fiyat, stok) VALUES (p_ad, p_fiyat, p_stok);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `UrunListele` ()   BEGIN
+CREATE PROCEDURE `UrunListele` ()   BEGIN
     SELECT * FROM urunler;
 END$$
 
@@ -137,8 +139,8 @@ CREATE TABLE `urunler` (
 --
 
 INSERT INTO `urunler` (`urun_id`, `urun_ad`, `fiyat`, `stok`) VALUES
-(1, 'doner', 150, 10000),
-(2, 'çavdar', 50, 9900);
+(1, 'Somun Ekmek', 10, 10000),
+(2, 'Çavdar Ekmeği', 15, 9900);
 
 --
 -- Dökümü yapılmış tablolar için indeksler
